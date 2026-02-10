@@ -1,3 +1,177 @@
-<section id="fechas">
+---
+const dates = [
+    {
+        id:1,
+        date: '2026-03-20',
+        DisplayDate: '22 MAR 2026',
+        city: 'Buenos Aires',
+        venue: 'El galpón',
+        address: 'Godoy Cruz 1632, CABA',
+        map: 'https://www.google.com/maps?q=Godoy+Cruz+1631+CABA',
+        embed: 'https://www.google.com/maps?q=Godoy+Cruz+1631+CABA&output=embed',
+        tickets: 'https://passline.com'
+    }
+];
+
+const DAYS_BEFORE_TICKETS = 30;
+const today = new Date()
+
+function canShowTickets(eventDate: string) {
+    const showForm = new Date(eventDate);
+    showForm.setDate(showForm.getDate() - DAYS_BEFORE_TICKETS);
+    return today >= showForm;
+}
+---
+
+
+
+<section id="fechas" class="dates">
+    <div class="main-container">
+    <h2 class="section-title">Fechas</h2>
+
+    <ul class="dates-list">
+        {dates.map(date => {
+            const ticketsEnabled = 
+            date.tickets && canShowTickets(date.date);
+
+            return (  
+            <li class="date-card">
+                <div class="date-info">
+                    <span class="date-date">{date.DisplayDate}</span>
+                    <span class="date-venue">{date.venue}</span>
+                    <span class="date-city">{date.city}</span>
+                    <span class="date-address">{date.address}</span>
+        
+                        </div>
+
+                <div class="date-actions">
+                    {ticketsEnabled ? (
+                        <a href={date.tickets}
+                        target="_blank"
+                        class="date-btn"
+                        >
+                            Entradas
+                        </a>
+                    ) : (
+                        <span class="date-status">
+                            Próximamente
+                        </span>
+                    )}
+                    <a href={date.map}
+                    target="_blank"
+                    class="date-btn"
+                    >
+                        Cómo llegar
+                    </a>
+                </div>
+            </li>);
+        })}
+    </ul>
+    </div>
 
 </section>
+
+<style>
+
+.dates-list {
+    width: 100%;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.date-card {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.4);
+    transition: background 0.3s ease;
+}
+
+.date-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.date-date {
+    font-family: var(--font-title);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.date-venue {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.date-city,
+.date-address {
+    font-size: 0.9rem;
+    opacity: 0.75;
+}
+
+.date-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-end;
+    min-width: 120px;
+}
+
+.date-btn {
+    padding: 0.5rem 1.2rem;
+    border: 1px solid white;
+    text-decoration: none;
+    color: white;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    transition: background 0.2s ease;
+    text-align: center;
+    width: 100%;
+    display: block;
+}
+
+.date-btn:hover {
+    background: white;
+    color: black;
+}
+
+.date-status {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.08rem;
+}
+
+.date-map {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+    .date-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .date-actions {
+        align-items: flex-start;
+        width: 100%;
+        margin-top: 1rem;
+        flex-direction: row;
+    }
+    .date-btn {
+        width: auto;
+    }
+}
+
+</style>

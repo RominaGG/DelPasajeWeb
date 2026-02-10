@@ -1,14 +1,133 @@
 <section id="inicio" class="hero">
+
+    <div class="hero-slider">
+        <img src="/assets/img/galeria9.jpeg" alt=""/>
+        <img src="/assets/img/galeria10.jpeg" alt=""/>
+        <img src="/assets/img/galeria8.jpeg" alt="foto">
+        <img src="/assets/img/galeria11.jpeg" alt="">
+    </div>
+
+    <div class="hero-overlay"></div>
     <div class="hero-content">
         <h1 class="hero-title">Del Pasaje<span class="brand-mark">®</span></h1>
 
-        <p class="hero-text">
-            Rock argentino nacido en el oeste.</p>
+        <div class="hero-text">
+            <p>Rock argentino nacido en el oeste.</p>
             <p>Una banda de culto volvió a la ruta.</p> 
-            <p></p>
+            </div>
 
-        <a href="#fechas" class="hero-cta">
+        <a href="#fechas" class="hero-btn">
             Ver fechas
         </a>
     </div>
 </section>
+
+<style>
+    .hero {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.hero-slider {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-slider img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    animation: heroFade 15s infinite;
+}
+
+.hero-slider img:nth-child(1) {animation-delay: 0s;}
+.hero-slider img:nth-child(2) {animation-delay: 5s;}
+.hero-slider img:nth-child(3) {animation-delay: 10s;}
+.hero-slider img:nth-child(4) {animation-delay: 15s;}
+
+@keyframes heroFade {
+    0% {opacity: 0;}
+    10% {opacity: 1;}
+    30% {opacity: 1;}
+    40% {opacity: 0;}
+    100% {opacity: 0;}
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+
+}
+
+.hero-title,
+.hero-text {
+    color: white;
+}
+
+.hero-title {
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-family: var(--font-title);
+    font-weight: 700;
+    text-transform: uppercase;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    letter-spacing: 3px;
+}
+
+
+.hero-text {
+    margin-top: 0.5rem;
+    max-width: 600px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.95;
+    
+    
+}
+
+.hero-text p {
+    margin-top: 0.5rem;
+}
+
+.hero-btn {
+    margin-top: 1.5rem;
+    padding: 0.8rem 2rem;
+    color: white;
+    background: transparent;
+    text-decoration: none;
+    border: 1px solid white;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    transition: background 0.3s;
+}
+
+.hero-btn:hover {
+    background: white;
+    color: black;
+}
+
+.brand-mark {
+    font-size: 0.45rem;
+    vertical-align: super;
+    margin-left: 0.2rem;
+    opacity: 0.8;
+}
+</style>

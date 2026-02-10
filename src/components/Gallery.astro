@@ -1,3 +1,142 @@
-<section id="galeria">
+---
+const galleries = [
+    {
+        id:'romafonic',
+        title: 'Grabando',
+        date: '15 AGO 2025',
+        location: 'Buenos Aires',
+        photos: [
+
+        '/assets/img/galeria1.jpeg',
+        '/assets/img/galeria2.jpeg', 
+        '/assets/img/galeria3.jpeg',
+        '/assets/img/galeria4.jpeg',
+        '/assets/img/galeria5.jpeg'
+
+        ]
+    }
+
+];
+---
+
+
+<section id="galeria" class="section">
+    <div class="main-container">
+    <h2 class="section-title">Galería</h2>
     
+    <div class="gallery-feed">
+        {galleries.map(album =>(
+
+           <article class="gallery-album">
+
+            <header class="album-header">
+
+                <div class="album-info">
+                    <h3 class="album-title">{album.title}</h3>
+                    <span class="album-meta">{album.location} - {album.date}</span>
+                </div>
+                <div class="album-line"></div>
+            </header>
+
+            <div class="photo-grid">
+                {album.photos.map(photoUrl => (
+                    <div class="photo-item">
+                        <img src={photoUrl} alt={`Foto de ${album.title}`} loading="lazy"/>
+                    </div>
+                ))}
+            </div>
+
+           </article>
+        ))}
+    </div>
+    </div>
 </section>
+
+<style>
+    .gallery-feed{
+   display: flex;
+   flex-direction: column;
+   gap: 5rem;
+}
+
+.album-header {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.album-info {
+    flex-shrink: 0;
+}
+
+.album-title {
+    font-size: 1.5rem;
+    font-family: var(--font-title);
+    margin-bottom: 0.2rem;
+    color: white;
+}
+
+.album-meta {
+    font-size: 0.9rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.album-line {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    width: 100%;
+    margin-top: 5px;
+}
+
+.photo-grid {
+    display: grid;
+    /*Columnas automaticas min 250px de ancho */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.photo-item {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    border-radius: 2px;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    position: relative;
+}
+
+.photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease, filter 0.3s ease;
+    filter: grayscale(100%);
+    opacity: 0.8;
+
+}
+
+.photo-item:hover img {
+    transform: scale(1.05);
+    filter: grayscale(0%);
+    opacity: 1;
+}
+
+@media (max-width: 600px) {
+    .album-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .album-line {
+        display: none;
+    }
+    
+    .photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+}
+</style>

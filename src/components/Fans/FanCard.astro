@@ -1,0 +1,14 @@
+---
+const { post } = Astro.props;
+---
+
+<li class="fan-card">
+    {post.image && <img src={post.image} alt={post.name} />}
+
+    <p class="fan-message">"{post.message}"</p>
+
+    <span class="fan-name">
+        {post.name}
+        {post.instagram && <small>{post.instagram}</small>}
+    </span>
+</li>

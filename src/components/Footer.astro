@@ -1,0 +1,121 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer-content">
+    <h3 class="footer-brand">Del Pasaje</h3>
+
+    <ul class="footer-links">
+      <li>
+        <a
+          href="https://www.instagram.com/delpasajerock"
+          target="_blank"
+          rel="noopener"
+        >
+          <img src="/assets/icons/instagram.png" alt="Instagram" />
+        </a>
+      </li>
+
+      <li>
+      <a href="https://www.youtube.com/@delpasajerock" 
+      target="_blank"
+      rel="noopener"
+        >
+        <img src="/assets/icons/youtube.png" alt="YouTube">
+        </a>
+    </li>
+
+    <li>
+      <a
+        href="https://open.spotify.com/artist/0EGuCdH8jHq1Pztof3LLvw?si=GbtWHt0OSGKQ6jystxdqoA"
+        target="_blank"
+        rel="noopener"
+        >
+        <img src="/assets/icons/spotify.png" alt="Spotify">
+        </a
+      >
+    </li>
+
+    <li>
+        <a href="https://www.deezer.com/es/artist/284010661"
+        target="_blank"
+        rel="noopener">
+        <img src="/assets/icons/deezer.png" alt="Deezer">
+    
+    </a>
+    </li>
+
+    <li>
+        <a href="https://music.amazon.es/artists/B0DJ995CVQ/del-pasaje"
+        target="_blank"
+        rel="noopener">
+        <img src="/assets/icons/amazon-music.png" alt="Amazon Music">
+    </a>
+    </li>
+
+    <li>
+        <a href="https://music.apple.com/ar/artist/del-pasaje/1771570291"
+        target="_blank"
+        rel="noopener">
+        <img src="/assets/icons/apple-music.png" alt="AppleMusic">
+    </a>
+    </li>
+
+    
+    </ul>
+
+    <p class="footer-copy">
+      © {year} Del Pasaje. Todos los derechos reservados.
+    </p>
+  </div>
+</footer>
+
+
+<style>
+  .footer {
+    margin-top: 4rem;
+    padding: 2rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+.footer-brand {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    gap: 1.2rem;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links img {
+    width: 22px;
+    height: 22px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.footer-links a:hover img {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+</style>
