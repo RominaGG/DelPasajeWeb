@@ -1,22 +1,171 @@
-<section class="fans-form-section">
-    <h3>Querés ser parte?</h3>
+---
+import { fanPosts } from "./fans.config";
+import FanCard from "./FanCard.astro";
 
-    <p>
-        Mandanos tu foto o mensaje
-    </p>
+const approvedPosts = fanPosts.filter(p => p.approved);
+---
 
-    <form action="https://formspree.io/f/XXXXX" method="POST" enctype="multipart/form-data">
-    <input type="text" name="name" placeholder="Nombre"/>
-    <input type="text" name="instagram" placeholder="@insta (opcional)"/>
-    <textarea name="message" placeholder="Tu mensaje"></textarea>
+<section id="fans" class="section">
+    <div class="main-container">
 
-    <input type="file" name="photo" accept="image/*"/>
+        <div class="fans-header">
+            <h2 class="section-title">Comunidad</h2>
+            <p class="fans-intro">
+                Amigos pasajeros!
+            </p>
+        </div>
 
-    <label>
-        <input type="checkbox" required />
-        Autorizo a Del Pasaje a publicar este contenido
-    </label>
+        <ul class="fans-grid">
+            {approvedPosts.map(post => (
+                <FanCard post={post} />
+            ))}
+        </ul>
 
-    <button type="submit">Enviar</button>
-    </form>
+        <hr class="divider"/>
+
+        <div class="join-wrapper">
+            <div class="join-content">
+                <h3 class="join-title">Se parte del mural!</h3>
+                <p class="join-text">
+                    Queremos verte. Mandanos tu foto en el show, tu tatuaje o simplemente
+                    un mensaje de aguante.
+                    Elegimos las mejores para subirlas a la web.
+                </p>
+
+                <div class="join-steps">
+                    <span> Subí tu foto</span>
+                    <span>Dejanos tu mensaje</span>
+                    <span>Aparece en la web</span>
+                </div>
+
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeR8d5ON0zneTXXoroqWwEirIoGVFre4q8g8fUcLgDRlj2Q-Q/viewform"
+                target="_blank"
+                class="cta-btn"
+                >
+                SUBIR MI FOTO
+            </a>
+            </div>
+
+            
+        </div>
+    </div>
 </section>
+
+<style>
+    .fans-intro {
+        margin-top: -2rem;
+        margin-bottom: 2rem;
+        color: #aaa;
+        font-size: 1.1rem;
+        max-width: 600px;
+    }
+
+    .fans-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+        list-style: none;
+        padding: 0;
+        margin-bottom: 5rem;
+    }
+
+    .divider {
+        border: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2),transparent);
+        margin: 4rem 0;
+    }
+
+    .join-wrapper {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0% rgba(0,0,0,0) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 4rem 2rem;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    .join-content {
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+
+    }
+
+    .join-title {
+        font-family: var(--font-title);
+        font-size: 2.5rem;
+        margin: 0;
+        color: white;
+    }
+
+    .join-text {
+        color: #999;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .join-steps {
+        display: flex;
+        gap: 1.5rem;
+        margin: 1rem 0 2rem 0;
+        font-size: 0.9rem;
+        color: #fff;
+        font-weight: 700;
+        text-transform: uppercase;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .join-steps span {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+    }
+
+    .cta-btn {
+        background-color: white;
+        color: black;
+        text-decoration: none;
+        padding: 1rem 3rem;
+        font-weight: 800;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: 2px solid white;
+        transition: all 0.3s ease;
+        display: inline-block;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+
+    .cta-btn:hover {
+        background-color: transparent;
+        color: white;
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
+    }
+
+   
+
+   
+
+    /*Responsive */
+
+@media (max-width: 768px) {
+    .form-wrapper {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+        gap: 2rem;
+    }
+
+    .rock-form {
+        grid-template-columns: 1fr;
+    }
+
+    .full-width {
+        grid-column: span 1;
+    }
+}
+</style>

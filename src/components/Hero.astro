@@ -1,19 +1,60 @@
+---
+import { contentfulClient } from "../lib/contentful";
+
+// Pedimos los datos a Contenful
+// buscamos la entrada del tipo Homepage
+const entries = await contentfulClient.getEntries({
+    content_type: 'homepage',
+    limit: 1,
+});
+
+// Desempaquetamos los datos
+// si no encontramos nada (por error) usa un objeto vacio para qe no explote todo
+const homeData = entries.items[0]?.fields || {};
+
+//preparamos las variables con fallbacks por las dudas
+const title = homeData.heroTitle || 'Del Pasaje';
+const subtitle = homeData.heroSubtitle || 'Rock argentino nacido en el oeste.';
+
+// manejo de multimedia del fondo
+const rawImages = (homeData.heroBackground as any[])|| [];
+
+// mapeamos la lista de las imagenes para saacar solo las urls limpias
+let backgroundUrls = rawImages.map(img => 
+    img.fields?.file?.url ? `https:${img.fields.file.url}` : null
+).filter(url => url !== null);
+
+// fallback si no cargamos nada en contenful usamos local de emergencia
+if (backgroundUrls.length === 0) {
+    backgroundUrls.push('/assets/img/galeria8.jpeg');
+}
+
+---
+
+
 <section id="inicio" class="hero">
 
     <div class="hero-slider">
-        <img src="/assets/img/galeria9.jpeg" alt=""/>
+
+        {backgroundUrls.map((url, index) => (
+            // primera imagen index 0, lleva active aara verse al inicio
+            <img src={url} alt={ `Fondo Hero ${index}`}
+                class={`slide-img ${index === 0 ? 'active' : ''}`}
+            />
+        ))}
+        <!---  <img src="/assets/img/galeria9.jpeg" alt=""/>
         <img src="/assets/img/galeria10.jpeg" alt=""/>
         <img src="/assets/img/galeria8.jpeg" alt="foto">
-        <img src="/assets/img/galeria11.jpeg" alt="">
+        <img src="/assets/img/galeria11.jpeg" alt="">-->
     </div>
 
     <div class="hero-overlay"></div>
     <div class="hero-content">
-        <h1 class="hero-title">Del Pasaje<span class="brand-mark">®</span></h1>
+        <h1 class="hero-title">{title}<span class="brand-mark">®</span></h1>
 
-        <div class="hero-text">
-            <p>Rock argentino nacido en el oeste.</p>
-            <p>Una banda de culto volvió a la ruta.</p> 
+        <div class="hero-subtitle">
+            <p>{subtitle}</p>
+             
             </div>
 
         <a href="#fechas" class="hero-btn">
@@ -22,10 +63,34 @@
     </div>
 </section>
 
+<script>
+
+    // este corre en navegador para cambiar las fotos
+    const slides = document.querySelectorAll('.slide-img');
+    let currentSlide = 0;
+    const slideInterval = 5000; // 5 segundos entre foto 
+
+    // se activa si hay mas de una foto
+    if (slides.length > 1 ) {
+        setInterval(() => {
+            // sacamos la clase active de la foto aactual
+            slides[currentSlide].classList.remove('active');
+            //calculo cual es la siguiente 
+            currentSlide = (currentSlide + 1) % slides.length;
+        
+        // ponemos active a la siguiente foto
+        slides[currentSlide].classList.add('active');
+    }, slideInterval);
+};
+
+</script>
+
+
 <style>
     .hero {
     position: relative;
-    height: 100vh;
+    height: 80vh;
+    min-height: 500px;
     overflow: hidden;
 }
 
@@ -35,20 +100,20 @@
     z-index: 0;
 }
 
-.hero-slider img {
+.hero-slider .slide-img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    animation: heroFade 15s infinite;
+    transition: opacity 1.5s ease-in-out;
+    
 }
 
-.hero-slider img:nth-child(1) {animation-delay: 0s;}
-.hero-slider img:nth-child(2) {animation-delay: 5s;}
-.hero-slider img:nth-child(3) {animation-delay: 10s;}
-.hero-slider img:nth-child(4) {animation-delay: 15s;}
+.hero-slider .slide-img.active {
+    opacity: 1;
+}
 
 @keyframes heroFade {
     0% {opacity: 0;}

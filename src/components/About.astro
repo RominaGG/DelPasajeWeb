@@ -1,31 +1,45 @@
+---
+import  { contentfulClient} from '../lib/contentful';
+import {documentToHtmlString} from '@contentful/rich-text-html-renderer';
 
-<section id="nosotros" class="section-about">
+const entries = await contentfulClient.getEntries({
+    content_type: 'homepage',
+    limit: 1,
+});
+
+const homeData: any = entries.items[0]?.fields || {};
+
+const aboutTitle = homeData.aboutTitle || 'Nosotros';
+let aboutImageUrl = '/assets/img/lineasdelocaso.jpg';
+if ( homeData.aboutImage?.fields?.file?.url) {
+    aboutImageUrl = `https:${homeData.aboutImage.fields.file.url}`;
+}
+
+// Procesamos eel texto enriquecido
+// convertimos el json de Contentful a html string
+
+const rawRichText = homeData.aboutDescription;
+const aboutHtmlString = rawRichText
+    ? documentToHtmlString(rawRichText)
+    : '<p>Informacion de la banda proximamente.</p>';    
+    
+---
+
+
+
+<section id="nosotros" class="section section-about">
   <div class="main-container">
 
     
 
     <div class="about-layout">
     <div class="about-text">
-        <h2 class="section-title">Nosotros</h2>
-      <p>
-        Del Pasaje es una banda de rock argentino formada en Hurlingham,
-        provincia de Buenos Aires, considerada una banda de culto por la
-        intensidad de sus letras y la diversidad de su público
-      </p>
-      <p>
-        Activos desde 1999, vivieron su etapa más intensa entre los años 2000 y
-        2008, compartiendo escenario con artistas como Mimi Maura, Alejandro
-        Sokol y No Te Va Gustar. Tras un período de inactividad, la banda
-        regresa en 2024 con nuevas canciones.
-      </p>
-      <p>
-        Con un sonido que cruza el rock, hard rock, el post-punk y elementos del
-        tango y el flamenco, Del Pasaje vuelve a la ruta apostando a la canción,
-        la identidad y el encuentro con su público.
-      </p>
+        <h2 class="section-title">{aboutTitle}</h2>
+      
+        <div class="rich-text-content" set:html={aboutHtmlString}> </div>
     </div>
     <div class="about-flyer">
-      <img src="/assets/img/lineasdelocaso.jpg" alt="disco tapa">
+      <img src={aboutImageUrl} alt="disco tapa">
     </div>
   </div>
   </div>
@@ -53,7 +67,7 @@
     position: absolute;
     left: 0;
  /*Movemos la linea de al lado del texto */
-    top: 150px;
+    top: 125px;
     height: 60%;
     width: 2px;
     background-color: white;
@@ -64,15 +78,42 @@
     display: block;
     width: 100%;
     margin-left: -2rem;
+    font-family: var(--font-title);
 }
 
-.about-text p {
+.rich-tetx-content {
+    font-family: var(--font-body);
+    color: white;
+    width: 100%;
+
+}
+.rich-text-content :global(p) {
+    font-family: var(--font-body);
     font-size: 1.05rem;
     letter-spacing: 0.02rem;
     line-height: 1.8;
     margin-bottom: 1.5rem;
+    color: #e0e0e0;
+    font-weight: 500;
 }
 
+.rich-text-content :global(strong),
+.rich-text-content :global(b) {
+    color: #fff;
+    font-weight: 700;
+
+}
+
+.rich-tetx-content :global(ul) {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.rich-tetx-content :global(li) {
+    font-family: var(--font-body);
+    margin-bottom: 0.5rem;
+    color: white;
+}
 
 
 .about-flyer {
@@ -87,8 +128,10 @@
     opacity: 0.3;
     filter:  contrast(1.1);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-    
+    border-radius: 4px;
 }
+
+
 
 @media (max-width: 900px) {
     .about-layout {

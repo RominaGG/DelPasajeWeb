@@ -14,6 +14,19 @@ const galleries = [
         '/assets/img/galeria5.jpeg'
 
         ]
+    },
+    {
+        id: 'teatro',
+        title: 'Teatro Capital',
+        date: '17 JUL 2010',
+        location: 'CABA',
+        photos: [
+            
+            '/assets/img/galeria12.jpg',
+            '/assets/img/galeria13.jpg',
+            '/assets/img/galeria14.jpg',
+            '/assets/img/galeria15.jpg'
+        ]
     }
 
 ];
@@ -40,9 +53,12 @@ const galleries = [
 
             <div class="photo-grid">
                 {album.photos.map(photoUrl => (
-                    <div class="photo-item">
-                        <img src={photoUrl} alt={`Foto de ${album.title}`} loading="lazy"/>
-                    </div>
+                    <a href={photoUrl}
+                    data-fslightbox={album.id}
+                    class="photo-item"
+                    >
+                        <img src={photoUrl} alt={`Foto de ${album.title}`} loading="lazy" />
+                    </a>
                 ))}
             </div>
 
@@ -52,6 +68,8 @@ const galleries = [
     </div>
 </section>
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.3.1/index.min.js" is:inline></script>
 <style>
     .gallery-feed{
    display: flex;

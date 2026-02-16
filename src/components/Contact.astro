@@ -1,71 +1,111 @@
-<section id="contacto" class="contact">
-    <h2>Contacto</h2>
+<section id="contacto" class="section">
+  <div class="main-container">
+    <h2 class="section-title">Contacto</h2>
 
-    <p class="contact-text">
-        Para fechas, prensa o consultas escribinos:
-    </p>
+    <div class="contact-layout">
+      <p class="contact-text">Para fechas, prensa o consultas escribinos:</p>
 
-    <ul class="contact-links">
+      <ul class="contact-links">
         <li class="contact-item">
+          <a href="mailto:delpasajerock@gmail.com">
+            <img
+              src="/assets/icons/mail.png"
+              alt="Email"
+              class="contact-icon"
+            />
 
-            <a href="mailto:delpasajerock@gmail.com">
-                <img src="/assets/icons/mail.png" 
-                alt="Email" 
-                class="contact-icon"/>
-
-                <span>delpasajerock@gmail.com</span>
-            </a>
+            <span>delpasajerock@gmail.com</span>
+          </a>
         </li>
 
         <li class="contact-item">
-            <a 
-            href="https://www.instagram.com/delpasajerock" 
+          <a
+            href="https://www.instagram.com/delpasajerock"
             target="_blank"
-            rel="noopener">
-            <img src="/assets/icons/instagram.png" 
-            alt="Instagram"
-            class="contact-icon"/>
-            <span>Instagram</span>
-        </a>
+            rel="noopener"
+          >
+            <img
+              src="/assets/icons/instagram.png"
+              alt="Instagram"
+              class="contact-icon"
+            />
+            <span>@delpasajerock</span>
+          </a>
         </li>
 
         <li class="contact-item">
-            <a href="https://www.youtube.com/@delpasajerock" 
+          <a
+            href="https://www.youtube.com/@delpasajerock"
             target="_blank"
-            rel="noopener">
-            <img src="/assets/icons/youtube.png" 
-            alt="YouTube"
-            class="contact-icon"/>
-            <span>YouTube</span>
-        </a>
+            rel="noopener"
+          >
+            <img
+              src="/assets/icons/youtube.png"
+              alt="YouTube"
+              class="contact-icon"
+            />
+            <span>YouTube Oficial</span>
+          </a>
         </li>
-    </ul>
-
+      </ul>
+    </div>
+  </div>
 </section>
 
 <style>
-    .contact-links {
-  list-style: none;
-  padding: 0;
-  margin: 2rem 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
+  .contact-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
 
-.contact-item a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  text-decoration: none;
-  color: inherit;
-  font-size: 1.1rem;
-}
+  .contact-text {
+    font-size: 1.1rem;
+    color: #ccc;
+    max-width: 600px;
+    line-height: 1.6;
+  }
 
-.contact-icon {
-  width: 22px;
-  height: 22px;
-  object-fit: contain;
-  color: aliceblue;
-}
+  .contact-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+  }
+
+  .contact-item a {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 0.8rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .contact-icon a:hover {
+    background: white;
+    color: black;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+  }
+
+  .contact-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    transition: filter 0.3s ease;
+    filter: invert(1);
+  }
+
+  .contact-item a:hover .contact-icon {
+    filter: invert(0);
+  }
 </style>
