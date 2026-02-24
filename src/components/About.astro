@@ -70,7 +70,7 @@ const aboutHtmlString = rawRichText
     top: 125px;
     height: 60%;
     width: 2px;
-    background-color: white;
+    background-color: var(--color-brown-solid);
 }
 .about-text .section-title {
     margin-bottom: 1.5rem;
@@ -83,7 +83,7 @@ const aboutHtmlString = rawRichText
 
 .rich-tetx-content {
     font-family: var(--font-body);
-    color: white;
+    color: var(--color-text-main);
     width: 100%;
 
 }
@@ -93,13 +93,13 @@ const aboutHtmlString = rawRichText
     letter-spacing: 0.02rem;
     line-height: 1.8;
     margin-bottom: 1.5rem;
-    color: #e0e0e0;
+    color: var(--color-text-muted);
     font-weight: 500;
 }
 
 .rich-text-content :global(strong),
 .rich-text-content :global(b) {
-    color: #fff;
+    color: var(--color-text-main);
     font-weight: 700;
 
 }
@@ -112,7 +112,7 @@ const aboutHtmlString = rawRichText
 .rich-tetx-content :global(li) {
     font-family: var(--font-body);
     margin-bottom: 0.5rem;
-    color: white;
+    color: var(--color-text-main);
 }
 
 
@@ -133,10 +133,13 @@ const aboutHtmlString = rawRichText
 
 
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .about-layout {
-        display: block;
-        position: relative;
+        gap: 2rem;
+    }
+
+    .about-text::before {
+        display: none;
     }
 
     .about-flyer {
@@ -157,10 +160,44 @@ const aboutHtmlString = rawRichText
     }
 }
 
+@media (max-width: 768px) {
+    .about-layout {
+        display: block;
+        position: relative;
+    }
+
+    .about-flyer {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 0;
+        pointer-events: none;
+        margin-top: 0;
+    }
+
+    .about-flyer img {
+        max-width: 320px;
+        opacity: 0.15;
+    }
+
+    .about-text {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 2rem;
+        border-radius: 2px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+
+        z-index: 1;
+    }
+}
+
 @media (max-width: 480px) {
+    .about-text {
+        padding: 1.2rem;
+    }
     .about-flyer img {
         max-width: 240px;
-        opacity: 0.2;
     }
 }
 </style>

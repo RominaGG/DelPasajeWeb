@@ -1,5 +1,6 @@
 ---
 import Nav from '../components/Nav.astro';
+import SocialBar from '../components/SocialBar.astro';
 import Hero from '../components/Hero.astro';
 import Dates from '../components/Dates.astro';
 import Media from '../components/Media.astro';
@@ -16,13 +17,19 @@ import '../styles/global.css'
 
 <BaseLayout title="Del Pasaje">
 <Nav />
-
+<SocialBar />
 	<Hero />
+	<hr class="section-divider" />
 	<Us />
+	<hr class="section-divider" />
 	<Dates />
+	<hr class="section-divider" />
 	<Media />
+	<hr class="section-divider" />
 	<Gallery />
+	<hr class="section-divider" />
 	<FanForm />
+	<hr class="section-divider" />
 	<Contact />
 	<Footer />
 </BaseLayout>

@@ -1,35 +1,39 @@
 ---
-const galleries = [
-    {
-        id:'romafonic',
-        title: 'Grabando',
-        date: '15 AGO 2025',
-        location: 'Buenos Aires',
-        photos: [
+import { contentfulClient } from "../lib/contentful";
 
-        '/assets/img/galeria1.jpeg',
-        '/assets/img/galeria2.jpeg', 
-        '/assets/img/galeria3.jpeg',
-        '/assets/img/galeria4.jpeg',
-        '/assets/img/galeria5.jpeg'
+// pedimos los albumes a contentful
+const entries = await contentfulClient.getEntries({
+    content_type: 'galeria',
+    order: '-fields.date' as any,
+});
 
-        ]
-    },
-    {
-        id: 'teatro',
-        title: 'Teatro Capital',
-        date: '17 JUL 2010',
-        location: 'CABA',
-        photos: [
-            
-            '/assets/img/galeria12.jpg',
-            '/assets/img/galeria13.jpg',
-            '/assets/img/galeria14.jpg',
-            '/assets/img/galeria15.jpg'
-        ]
-    }
+// formateo de fechas
 
-];
+const formatDate = (dateString: string) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('es-AR', {month:'short'}).toUpperCase().replace('.','');
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+
+};
+
+const galleries = entries.items.map((item:any) => {
+    const { title, date, location, photos} = item.fields;
+    return {
+        id: item.sys.id,
+        title,
+        date: formatDate(date),
+        location: location,
+        photos: photos.map((img:any) => 
+    img.fields?.file?.url ? `https:${img.fields.file.url}` : null 
+).filter(Boolean) || []
+
+};
+});
+
+const PHOTO_LIMIT = 4;
 ---
 
 
@@ -38,9 +42,9 @@ const galleries = [
     <h2 class="section-title">Galería</h2>
     
     <div class="gallery-feed">
-        {galleries.map(album =>(
+        {galleries.map((album, index) =>(
 
-           <article class="gallery-album">
+           <article class="gallery-album" id={`album-${index}`}>
 
             <header class="album-header">
 
@@ -52,15 +56,26 @@ const galleries = [
             </header>
 
             <div class="photo-grid">
-                {album.photos.map(photoUrl => (
+                {album.photos.map((photoUrl: string, photoIndex: number) => (
                     <a href={photoUrl}
                     data-fslightbox={album.id}
-                    class="photo-item"
+                    class={`photo-item ${photoIndex >= PHOTO_LIMIT ? 'hidden' : ''}`}
                     >
                         <img src={photoUrl} alt={`Foto de ${album.title}`} loading="lazy" />
                     </a>
                 ))}
             </div>
+
+            {album.photos.length > PHOTO_LIMIT && (
+                <div class="view-more-container">
+                <button class="btn-view-more"
+                data-target={`album-${index}`}
+                data-limit={PHOTO_LIMIT}
+                data-total={album.photos.length}>
+                    Ver más (+{album.photos.length - PHOTO_LIMIT})
+                </button>
+                 </div>
+            )}
 
            </article>
         ))}
@@ -70,6 +85,51 @@ const galleries = [
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.3.1/index.min.js" is:inline></script>
+<script>
+    document.querySelectorAll('.btn-view-more').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const btn = e.currentTarget as HTMLButtonElement;
+            const targetId = btn.dataset.target;
+            const limit = parseInt(btn.dataset.limit || '4');
+            const total = parseInt(btn.dataset.total || '0');
+
+            if (!targetId) return;
+            const albumContainer = document.getElementById(targetId);
+
+            if (albumContainer) {
+                const isExpanded = btn.classList.contains('expanded');
+                const allPhotos = albumContainer.querySelectorAll('.photo-item');
+
+                if (!isExpanded) {
+                    allPhotos.forEach((photo, index) => {
+                        if (index >= limit) {
+                            photo.classList.remove('hidden');
+                            photo.classList.add('fade-in');
+                        }
+                    });
+                    btn.textContent = 'Ver menos';
+                    btn.classList.add('expanded');
+                } else {
+                    allPhotos.forEach((photo, index) => {
+                        if (index >= limit) {
+                            photo.classList.add('hidden');
+                            photo.classList.remove('fade-in');
+                        }
+                    });
+
+
+                    const remaining = total - limit;
+                    btn.textContent = `Ver más (+${remaining})`;
+
+                    btn.classList.remove('expanded');
+                }
+            }
+        });
+        });
+</script>
+
+
+
 <style>
     .gallery-feed{
    display: flex;
@@ -92,19 +152,19 @@ const galleries = [
     font-size: 1.5rem;
     font-family: var(--font-title);
     margin-bottom: 0.2rem;
-    color: white;
+    color: var(--color-text-main);
 }
 
 .album-meta {
     font-size: 0.9rem;
-    color: #888;
+    color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .album-line {
     height: 1px;
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--color-brown-solid);
     width: 100%;
     margin-top: 5px;
 }
@@ -120,7 +180,7 @@ const galleries = [
     aspect-ratio: 4/3;
     overflow: hidden;
     border-radius: 2px;
-    background-color: #1a1a1a;
+    background-color: var(--color-bg-card);
     cursor: pointer;
     position: relative;
 }
@@ -141,6 +201,47 @@ const galleries = [
     opacity: 1;
 }
 
+.hidden {
+    display: none;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+
+    to { opacity: 1; transform: translateY(0);}
+}
+
+.view-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.btn-view-more {
+    background: transparent;
+    border: 1px solid var(--color-brown-solid);
+    color: var(--color-text-main);
+    padding: 0.8rem 2rem;
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.btn-view-more:hover {
+    border-color: #888;
+    color: var(--color-text-main);
+    background: var(--color-brown-solid);
+    box-shadow: 0 5px 15px var(--color-brown-glass);
+    transform: translateY(-2px);
+}
+
 @media (max-width: 600px) {
     .album-header {
         flex-direction: column;
@@ -156,5 +257,9 @@ const galleries = [
         grid-template-columns: repeat(2, 1fr);
         gap: 0.5rem;
     }
+
+    .btn-view-more {
+        width: 100%;
+    }
 }
-</style>
+</style>   

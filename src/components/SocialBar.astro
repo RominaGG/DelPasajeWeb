@@ -1,0 +1,147 @@
+---
+import { contentfulClient } from "../lib/contentful";
+
+const entries = await contentfulClient.getEntries({
+    content_type: 'globalSettings',
+    limit: 1
+});
+
+const settings: any = entries.items[0]?.fields || {};
+
+const spotifyLink = settings.spotifyUrl;
+const youtubeLink = settings.youtubeUrl;
+const instagramLink = settings.instagramUrl;
+const deezerLink = settings.deezerUrl;
+const amazonMusicLink = settings.amazonMusic;
+const appleMusicLink = settings.appleMusic;
+
+
+---
+
+<aside class="floating-socials">
+    <ul class="social-list">
+        {spotifyLink && (
+                <li>
+                    <a href={spotifyLink}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Escuchanos en Spotify">
+                        <img src="/assets/icons/spotify.png" alt="Spotify" class="social-icon"/>
+                    </a>
+                </li>
+            )}
+
+            {instagramLink && (
+                    <li>
+                        <a href={instagramLink}
+                        target="_blank"
+                        rel="noopener"
+                        aria-label="Seguinos en IG">
+                            <img src="/assets/icons/instagram.png" alt="Instagram" class="social-icon"/>
+                        </a>
+                    </li>
+                )}
+
+            {youtubeLink  && (
+                <li>
+                    <a href={youtubeLink}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Videos">
+                        <img src="/assets/icons/youtube.png" alt="You Tube" class="social-icon"/>
+                    </a>
+                </li>
+            )}
+
+            {deezerLink && (
+                <li>
+                    <a href={deezerLink}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Deezer">
+                        <img src="/assets/icons/deezer.png" alt="Deezer" class="social-icon"/>
+                    </a>
+                </li>
+            )} 
+
+            {amazonMusicLink && ( 
+                <li>
+                    <a href={amazonMusicLink}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="AmazonMusic">
+                        <img src="/assets/icons/amazon-music.png" alt="Amazon Music" class="social-icon"/>
+                    </a>
+                </li>
+            )}
+
+            {appleMusicLink && (
+                <li>
+                    <a href={appleMusicLink}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="AppleMusic">
+                        <img src="/assets/icons/apple-music.png" alt="Apple Music" class="social-icon"/>
+                    </a>
+                </li>
+            )}
+    </ul>
+</aside>
+
+<style>
+
+    .floating-socials {
+        position: fixed;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        z-index: 999;
+        background: var(--color-brown-glass);
+        backdrop-filter: blur(6px);
+        padding: 1.2rem 0.6rem;
+        border-radius: 0 8px 8px 0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: none;
+        box-shadow: -2px 0 15px rgba(0, 0, 0, 0.5);
+        transition: var(--transition-fast);
+    }
+
+    .social-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .social-list a {
+        display: block;
+        transition: transform 0.3s ease;
+    }
+
+    .social-icon {
+        width: 28px;
+        height: 28px;
+        object-fit: contain;
+        filter: invert(1);
+        transition: var(--transition-fast);
+        opacity: 0.8;
+    }
+
+    .social-list a:hover {
+        transform: scale(1.1) translateX(-3px);
+    }
+
+    .social-list a:hover .social-icon {
+        opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+        .floating-socials {
+            display: none;
+        }
+    }
+
+</style>

@@ -8,6 +8,15 @@
   --font-body: "Inter", system-ui, sans-serif;
   --container-width: 1200px;
   --nav-height: 72px;
+  --color-text-main: #ffffff;
+  --color-text-muted: #cccccc;
+  --color-bg-base: #000000;
+  --color-bg-card: #121212;
+  --color-brown-solid: #61453a;
+  --color-brown-glass: rgba(97, 69, 58, 0.6);
+  --color-brown-light: rgba(97, 69, 58, 0.2);
+  
+  --transition-fast: all 0.3s ease;
 }
 
 html {
@@ -52,6 +61,15 @@ h3 {
   text-align: left;
 }
 
+.section-divider {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-brown-solid), transparent);
+  margin: 4rem auto;
+  width: 80%;
+  opacity: 0.6;
+}
+
 @media (min-width: 768px) {
   .video-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -61,5 +79,19 @@ h3 {
 @media (min-width: 1024px) {
   .video-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .section-divider {
+    margin: 2rem auto !important;
+  }
+
+  .section {
+    padding: 2.5rem 0 !important;
+  }
+
+  .section-title {
+    margin-bottom: 1.5rem !important;
   }
 }

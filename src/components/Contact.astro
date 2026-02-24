@@ -1,29 +1,45 @@
+---
+import { contentfulClient } from "../lib/contentful";
+
+const entries = await contentfulClient.getEntries({
+  content_type: "globalSettings",
+  limit: 1,
+});
+
+const settings: any = entries.items[0]?.fields || {};
+
+//datos dinamicos don fallback por las dudas
+
+const contactEmail = settings.contactEmail || "delpasajerock@gmail.com";
+const instagramLink =
+  settings.instagramUrl || "https://www.instagram.com/delpasajerock";
+const whatsapp =
+  settings.whatsappCommunityUrl || "https://whatsapp.com/channel/0029VahPJ0i1dAw4yoDx2W1s";
+---
+
 <section id="contacto" class="section">
   <div class="main-container">
     <h2 class="section-title">Contacto</h2>
 
     <div class="contact-layout">
+<div class="contact-info-block">
       <p class="contact-text">Para fechas, prensa o consultas escribinos:</p>
 
       <ul class="contact-links">
         <li class="contact-item">
-          <a href="mailto:delpasajerock@gmail.com">
+          <a href={`mailto:${contactEmail}`}>
             <img
               src="/assets/icons/mail.png"
               alt="Email"
               class="contact-icon"
             />
 
-            <span>delpasajerock@gmail.com</span>
+            <span>{contactEmail}</span>
           </a>
         </li>
 
         <li class="contact-item">
-          <a
-            href="https://www.instagram.com/delpasajerock"
-            target="_blank"
-            rel="noopener"
-          >
+          <a href={instagramLink} target="_blank" rel="noopener">
             <img
               src="/assets/icons/instagram.png"
               alt="Instagram"
@@ -33,37 +49,124 @@
           </a>
         </li>
 
-        <li class="contact-item">
-          <a
-            href="https://www.youtube.com/@delpasajerock"
-            target="_blank"
-            rel="noopener"
-          >
+        <li class="contact-item whatsapp-item">
+          <a href={whatsapp} target="_blank" rel="noopener">
             <img
-              src="/assets/icons/youtube.png"
-              alt="YouTube"
+              src="/assets/icons/whatsapp.png"
+              alt="WhatsApp"
               class="contact-icon"
             />
-            <span>YouTube Oficial</span>
+            <span>Comunidad WhatsApp</span>
           </a>
         </li>
       </ul>
     </div>
+
+    <div class="contact-form-block">
+      <p class="contact-text">Dejanos tu mensaje</p>
+
+      <form
+      id="rock-contact-form"
+        action="https://formspree.io/f/xjgeevew"
+        method="POST"
+        class="band-form"
+      >
+        <div class="form-row">
+          <input type="text" name="name" placeholder="Nombre" required class="form-input"/>
+          <input type="email" name="email" placeholder="Tu email" required class="form-input"/>
+        </div>
+
+        <textarea name="message" rows="5" placeholder="Contanos tu idea" required class="form-input textarea"
+        ></textarea>
+
+        <button type="submit" class="btn-submit">Enviar Mensaje</button>
+      
+        <div id="form-feedback" class="form-feedback"></div>
+      
+      </form>
+      </div>
+    </div>
   </div>
 </section>
+
+<script is:inline>
+  const form = document.getElementById('rock-contact-form');
+  const feedbackDiv = document.getElementById('form-feedback');
+
+  if (form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const submitBtn = form.querySelector('.btn-submit');
+      const originalBtnText = submitBtn.innerText;
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'ENVIANDO...';
+      feedbackDiv.innerHTML = '';
+      feedbackDiv.className = 'form-feedback';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        if (response.ok) {
+          feedbackDiv.innerHTML = 'Mensaje enviado!';
+          feedbackDiv.classList.add('success');
+          form.reset();
+        } else {
+          const data = await response.json();
+          if(Object.hasOwnProperty.call(data, 'errors')) {
+            feedbackDiv.innerHTML = data.errors.map(error => error.message).join(', ');
+
+          } else {
+            feedbackDiv.innerHTML = 'Hubo un problema al enviar el mensaje. Intente nuevamente'
+          }
+          feedbackDiv.classList.add('error');
+        }
+      } catch (error) {
+        feedbackDiv.innerHTML = 'Error de conexión.';
+        feedbackDiv.classList.add('error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = originalBtnText;
+
+        if (feedbackDiv.classList.contains('success')) {
+          setTimeout(() => {
+            feedbackDiv.innerHTML = '';
+            feedbackDiv.classList.remove('success');
+          }, 5000);
+        }
+      }
+    });
+  }
+</script>
 
 <style>
   .contact-layout {
     display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 4rem;
+    margin-top: 3rem;
+  }
+  .contact-info-block,
+  .contact-form-block {
+    flex: 1;
+    width: 100%;
   }
 
   .contact-text {
     font-size: 1.1rem;
-    color: #ccc;
+    color: var(--color-text-muted);
     max-width: 600px;
     line-height: 1.6;
+    margin-bottom: 2rem;
   }
 
   .contact-links {
@@ -71,8 +174,9 @@
     padding: 0;
     margin: 0;
     display: flex;
-    flex-wrap: wrap;
-    gap: 3rem;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
   }
 
   .contact-item a {
@@ -80,21 +184,28 @@
     align-items: center;
     gap: 1rem;
     text-decoration: none;
-    color: white;
+    color: var(--color-text-main);
     font-size: 1.1rem;
     font-weight: 500;
     padding: 0.8rem 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 4px;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.2);
+    transition: var(--transition-fast);
+    background: var(--color-bg-card);
+    width: 100%;
+    max-width: 350px;
   }
 
   .contact-icon a:hover {
-    background: white;
-    color: black;
+    background: var(--color-brown-solid);
+    border-color: var(--color-brown-solid);
+    color: white;
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  }
+
+  .whatsapp-item a {
+    border-color: rgba(37, 211, 102, 0.3);
   }
 
   .contact-icon {
@@ -107,5 +218,96 @@
 
   .contact-item a:hover .contact-icon {
     filter: invert(0);
+  }
+
+  .band-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: var(--color-bg-card);
+    padding: 2rem;
+    border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .form-row {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .form-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-family: inherit;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .form-input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: white;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .textarea.form-input {
+    resize: vertical;
+  }
+
+  .btn-submit {
+    align-self: flex-start;
+    background: transparent;
+    color: var(--color-text-main);
+    border: 1px solid var(--color-brown-solid);
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    margin-top: 0.5rem;
+  }
+
+  .btn-submit:hover {
+    background: var(--color-brown-solid);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 05px 15px rgba(97, 69, 58, 0.4);
+  }
+
+  .form-feedback.success {color: #4ade80;  }
+  .form-feedback.error {color: #f87171; }
+
+  @media (max-width: 850px) {
+    .contact-layout {
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .contact-links {
+      align-items: stretch;
+    }
+
+    .contact-item a {
+      max-width: 100%;
+    }
+
+    .form-row {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .btn-submit {
+      width: 100%;
+    }
   }
 </style>

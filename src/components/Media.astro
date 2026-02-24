@@ -1,17 +1,17 @@
 ---
 import VideoEmbed from '../components/VideoEmbed.astro'
+import { contentfulClient } from '../lib/contentful';
 
 
-const videos = [
-    {
-        title: 'Sucia Rutina (2024)',
-        youtubeUrl: 'https://www.youtube.com/watch?v=0SZk3sZtdqk'
-    },
-    {
-        title: 'Mi Retrato (2025)',
-        youtubeUrl: 'https://www.youtube.com/watch?v=3pSkbWFwEV8'
-    }
-];
+const entries = await contentfulClient.getEntries({
+    content_type: 'videos',
+    order: '-sys.createdAt' as any,
+});
+
+const videos = entries.items.map((item:any) => ({
+    title: item.fields.title,
+    youtubeUrl: item.fields.youtubeUrl
+}));
 ---
 
 
@@ -22,7 +22,7 @@ const videos = [
     <h2 class="section-title">Videos</h2>
 
     <ul class="video-grid">
-        {videos.map(video => (
+        {videos.map((video: any )=> (
            <li class="video-card"> 
         <VideoEmbed 
         title={video.title}
@@ -41,7 +41,7 @@ const videos = [
     
     .video-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 2rem;
         list-style: none;
         padding: 0;
@@ -49,16 +49,16 @@ const videos = [
     }
 
     .video-card {
-        background: #1a1a1a;
+        background: var(--color-bg-card);
         padding: 1rem;
-        border: 1px solid #333;
-        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: var(--transition-fast);
     }
 
     .video-card:hover {
         transform: translateY(-5px);
-        border-color: #fff;
-        box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        border-color: var(--color-brown-solid);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     }
 
     .info-container {
@@ -70,12 +70,13 @@ const videos = [
         font-size: 1.1rem;
         font-weight: 600;
         margin: 0;
-        color: #482203;
+        color: var(--color-text-main);
         text-transform: uppercase;
+        transition: color 0.3s ease;
         letter-spacing: 1px;
     }
 
     .video-card:hover, .video-title {
-        color: #fff;
+        color: var(--color-brown-solid);
     }
 </style>
