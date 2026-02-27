@@ -1,12 +1,27 @@
 ---
-const { title = "Del Pasaje" } = Astro.props;
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'Del Pasaje | Rock Argentino',
+  description = 'Sitio oficial de Del Pasaje. Banda de rock de Buenos Aires, Argentina. Historia, fechas, discografía y novedades.',
+  image = 'assets/img/lineasdelocaso.jpg' 
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <meta name="description" content={description}/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/assets/icons/DelPasajeLogoNegroenPng.png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,6 +29,22 @@ const { title = "Del Pasaje" } = Astro.props;
       rel="stylesheet"
     />
 
+    <meta name="generator" content={Astro.generator}/>
+
+    <meta name="keywords" content="Del Pasaje, rock, rock argentino, banda, música, rock nacional, under, banda de culto" />
+    <meta name="author" content="Del Pasaje" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title}/>
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.url)} />
+    
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url}>
+    <meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={description} />
+		<meta property="twitter:image" content={new URL(image, Astro.url)} /> 
     <title>{title}</title>
   </head>
   <body>

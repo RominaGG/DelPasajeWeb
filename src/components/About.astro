@@ -1,18 +1,18 @@
 ---
-import  { contentfulClient} from '../lib/contentful';
-import {documentToHtmlString} from '@contentful/rich-text-html-renderer';
+import { contentfulClient } from "../lib/contentful";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 
 const entries = await contentfulClient.getEntries({
-    content_type: 'homepage',
-    limit: 1,
+  content_type: "homepage",
+  limit: 1,
 });
 
 const homeData: any = entries.items[0]?.fields || {};
 
-const aboutTitle = homeData.aboutTitle || 'Nosotros';
-let aboutImageUrl = '/assets/img/lineasdelocaso.jpg';
-if ( homeData.aboutImage?.fields?.file?.url) {
-    aboutImageUrl = `https:${homeData.aboutImage.fields.file.url}`;
+const aboutTitle = homeData.aboutTitle || "Nosotros";
+let aboutImageUrl = "/assets/img/lineasdelocaso.jpg";
+if (homeData.aboutImage?.fields?.file?.url) {
+  aboutImageUrl = `https:${homeData.aboutImage.fields.file.url}`;
 }
 
 // Procesamos eel texto enriquecido
@@ -20,74 +20,83 @@ if ( homeData.aboutImage?.fields?.file?.url) {
 
 const rawRichText = homeData.aboutDescription;
 const aboutHtmlString = rawRichText
-    ? documentToHtmlString(rawRichText)
-    : '<p>Informacion de la banda proximamente.</p>';    
-    
+  ? documentToHtmlString(rawRichText)
+  : "<p>Informacion de la banda proximamente.</p>";
 ---
-
-
 
 <section id="nosotros" class="section section-about">
   <div class="main-container">
-
-    
-
     <div class="about-layout">
-    <div class="about-text">
+      <div class="about-text">
         <h2 class="section-title">{aboutTitle}</h2>
-      
-        <div class="rich-text-content" set:html={aboutHtmlString}> </div>
+
+        <div class="rich-text-content" set:html={aboutHtmlString} />
+
+        <div class="about-actions">
+          <a href="/history" class="btn-history">Historia Completa</a>
+
+          <a
+            href="/assets/img/prensa1.jpg"
+            data-fslightbox="prensa"
+            class="btn-press"
+          >
+            Archivo Prensa</a
+          >
+        </div>
+        <div class="hidden">
+          <a href="/assets/img/prensa2.jpg" data-fslightbox="prensa"></a>
+          <a href="/assets/img/prensa3.jpg" data-fslightbox="prensa"></a>
+        </div>
+      </div>
+
+      <div class="about-flyer">
+        <img src={aboutImageUrl} alt="disco tapa" />
+      </div>
     </div>
-    <div class="about-flyer">
-      <img src={aboutImageUrl} alt="disco tapa">
-    </div>
-  </div>
   </div>
 </section>
 
 <style>
- 
-.about-layout {
+  .about-layout {
     display: flex;
     align-items: flex-start;
     position: relative;
     gap: 4rem;
-}
+  }
 
-.about-text {
+  .about-text {
     max-width: 720px;
     padding-left: 2rem;
     background: none;
     position: relative;
     z-index: 2;
-}
+  }
 
-.about-text::before {
-    content: '';
+  .about-text::before {
+    content: "";
     position: absolute;
     left: 0;
- /*Movemos la linea de al lado del texto */
+    /*Movemos la linea de al lado del texto */
     top: 125px;
     height: 60%;
     width: 2px;
     background-color: var(--color-brown-solid);
-}
-.about-text .section-title {
+  }
+  .about-text .section-title {
     margin-bottom: 1.5rem;
     border: none;
     display: block;
     width: 100%;
     margin-left: -2rem;
     font-family: var(--font-title);
-}
+  }
 
-.rich-tetx-content {
+  .rich-text-content {
     font-family: var(--font-body);
     color: var(--color-text-main);
     width: 100%;
-
-}
-.rich-text-content :global(p) {
+  }
+  .rich-text-content :global(p) {
     font-family: var(--font-body);
     font-size: 1.05rem;
     letter-spacing: 0.02rem;
@@ -95,109 +104,164 @@ const aboutHtmlString = rawRichText
     margin-bottom: 1.5rem;
     color: var(--color-text-muted);
     font-weight: 500;
-}
+  }
 
-.rich-text-content :global(strong),
-.rich-text-content :global(b) {
+  .rich-text-content :global(strong),
+  .rich-text-content :global(b) {
     color: var(--color-text-main);
     font-weight: 700;
+  }
 
-}
-
-.rich-tetx-content :global(ul) {
+  .rich-text-content :global(ul) {
     padding-left: 1.5rem;
     margin-bottom: 1.5rem;
-}
+  }
 
-.rich-tetx-content :global(li) {
+  .rich-text-content :global(li) {
     font-family: var(--font-body);
     margin-bottom: 0.5rem;
     color: var(--color-text-main);
-}
+  }
 
+  .about-actions {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+  }
 
-.about-flyer {
+  .btn-history {
+    background: var(--color-brown-solid);
+    color: white;
+    padding: 0.8rem 2rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 2px;
+    transition: var(--transition-fast);
+    border: 1px solid var(--color-brown-solid);
+  }
+
+  .btn-history:hover {
+    background: transparent;
+    color: white;
+    box-shadow: 0 5px 15px rgba(97, 69, 58, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .btn-press {
+    background: transparent;
+    color: white;
+    padding: 0.8rem 2rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 2px;
+    transition: var(--transition-fast);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+  }
+
+  .btn-press:hover {
+    border-color: white;
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .about-flyer {
     position: relative;
     margin-top: 4.5rem;
     z-index: 1;
-}
-.about-flyer img {
+  }
+  .about-flyer img {
     width: 100%;
     max-width: 320px;
     transform: rotate(8deg);
     opacity: 0.3;
-    filter:  contrast(1.1);
+    filter: contrast(1.1);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     border-radius: 4px;
-}
+  }
 
-
-
-@media (max-width: 1024px) {
+  @media (max-width: 1024px) {
     .about-layout {
-        gap: 2rem;
+      gap: 2rem;
     }
 
     .about-text::before {
-        display: none;
+      display: none;
     }
 
     .about-flyer {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 0;
-        pointer-events: none;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 0;
+      pointer-events: none;
     }
 
     .about-text {
-        /*position: relative;
+      /*position: relative;
         z-index: 1;*/
-        background: rgba(0, 0, 0, 0.6);
-        padding: 2rem;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
     }
-}
+  }
 
-@media (max-width: 768px) {
+  @media (max-width: 768px) {
     .about-layout {
-        display: block;
-        position: relative;
+      display: block;
+      position: relative;
     }
 
     .about-flyer {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 0;
-        pointer-events: none;
-        margin-top: 0;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 0;
+      pointer-events: none;
+      margin-top: 0;
     }
 
     .about-flyer img {
-        max-width: 320px;
-        opacity: 0.15;
+      max-width: 320px;
+      opacity: 0.15;
     }
 
     .about-text {
-        background: rgba(0, 0, 0, 0.6);
-        padding: 2rem;
-        border-radius: 2px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-
-        z-index: 1;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 2px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 1;
     }
-}
 
-@media (max-width: 480px) {
+    .btn-history,
+    .btn-press {
+      width: 100%;
+      text-align: center;
+    }
+
+    .about-actions {
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
     .about-text {
-        padding: 1.2rem;
+      padding: 1.2rem;
     }
     .about-flyer img {
-        max-width: 240px;
+      max-width: 240px;
     }
-}
+  }
 </style>
