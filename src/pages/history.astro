@@ -26,7 +26,12 @@ import Footer from "../components/Footer.astro";
                con grandes figuras de la escena nacional como <strong>Mimi Maura, Alejandro Sokol, No Te Va Gustar y El Bordo</strong>. 
             </p>
             <div class="history-image-wrapper">
-                <p class="image-caption">Espacio para foto</p>
+                <figure class="history-figure">
+                    <img src="/assets/img/DSC00443.JPG" alt="Inicios" class="history-img" />
+                    <figcaption class="image-caption">
+                        Inicios de la banda
+                    </figcaption>
+                </figure>
             </div>
 
             <h3>El Origen</h3>
@@ -45,10 +50,15 @@ import Footer from "../components/Footer.astro";
                 Ferrando en el bajo. Así comenzaron a tocar en vivo y a componer como un verdadero grupo, sumando poco tiempo despues a Gregorio Papaianni en la armónica. </p>
 
                 <div class="history-image-wrapper">
-                    <p class="image-caption">Espacio para foto</p>
+                    <figure class="history-figure">
+                        <img src="/assets/img/087.jpg" alt="En el teatro de Colegiales" class="history-img" />
+                        <figcaption class="image-caption">
+                            En el teatro de Colegiales (hoy Vorterix)
+                        </figcaption>
+                    </figure>
                 </div>
 
-                <h3>El salto aa Colegiales y el show con Sokol</h3>
+                <h3>El salto a Colegiales y el show con Sokol</h3>
                 <p>El esfuerzo dio sus frutos con la llegada de su segundo disco, <strong>'Barro' (2004)</strong>. El impacto del álbum los llevó a ser finalistas del mítico certamen <em>Bombardeo del Demo</em>
                 en la radio Rock & Pop, gracias a la fuerza de su tema 'Lucy'. Este hito les abrió las puertas para presentarse en el legendario Teatro Colegiales (hoy Vorterix), compartiendo fecha con Ocaso 2012 y Vankina.</p>
 
@@ -115,13 +125,20 @@ import Footer from "../components/Footer.astro";
 
 <style>
     .history-image-wrapper {
-        margin: 2.5rem 0;
+        margin: 2rem auto;
+        max-width: 400px;
         text-align: center;
         background: rgba(255, 255, 255, 0.02);
         border: 1px dashed rgba(255, 255, 255, 0.01);
         padding: 1rem;
         border-radius: 2px;
     }
+
+    .history-figure {
+        margin: 0;
+    }
+
+    
 
     .history-image {
         width: 100%;
@@ -165,9 +182,9 @@ import Footer from "../components/Footer.astro";
 
     .fixed-back-btn {
         position: fixed;
-        top: 2rem;
+        top: 120px;
         left: 2rem;
-        z-index: 100;
+        z-index: 90;
         color: var(--color-text-main);
         text-decoration: none;
         font-weight: 700;
@@ -192,7 +209,7 @@ import Footer from "../components/Footer.astro";
 
     @media (max-width: 768px) {
         .fixed-back-btn {
-            top: 1rem;
+            top: 85px;
             left: 1rem;
             padding: 0.5rem;
             font-size: 0.8rem;
@@ -201,9 +218,27 @@ import Footer from "../components/Footer.astro";
         .fixed-back-btn span { font-size: 1.2rem;}
     }
 
+    .history-page {
+        padding-top: 85px;
+    }
+
+    .page-title {
+        font-size: 2.2rem;
+    }
+
+    .history-content {
+        padding: 1.5rem;
+    }
+
     @media (max-width: 600px) {
         .history-columns {
             grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .history-page {
+            padding-top: 140px;
         }
     }
 </style>
