@@ -127,7 +127,9 @@ import Footer from "../components/Footer.astro";
     .history-image-wrapper {
         margin: 2rem auto;
         max-width: 400px;
+        width: 100%;
         text-align: center;
+        display: block;
         background: rgba(255, 255, 255, 0.02);
         border: 1px dashed rgba(255, 255, 255, 0.01);
         padding: 1rem;
@@ -137,15 +139,14 @@ import Footer from "../components/Footer.astro";
     .history-figure {
         margin: 0;
     }
-
-    
-
-    .history-image {
+    .history-img {
         width: 100%;
         max-width: 100%;
-        height: auto;
+        max-height: 450px;
+        object-fit: cover;
+        
         border-radius: 2px;
-        box-shadow: 0 10px 220px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     }
 
     .image-caption {
@@ -162,7 +163,7 @@ import Footer from "../components/Footer.astro";
         padding: 1.5rem;
         margin: 2.5rem 0;
         background: var(--color-brown-glass);
-        font-size: italic;
+        font-style: italic;
         color: white;
     }
 
