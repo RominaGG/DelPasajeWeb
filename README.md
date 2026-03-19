@@ -22,7 +22,7 @@ Este proyecto está construido con un stack moderno enfocado en la velocidad y e
 Si querés clonar este proyecto y correrlo en tu computadora, abrí tu terminal y  seguí estos pasos:
 ```bash
 # 1. Cloná el repositorio
-git clone [https://github.com/RominaGG/DelPasajeWeb.git](https://github.com/RominaGG/DelPasajeWeb.git) 
+git clone https://github.com/RominaGG/DelPasajeWeb.git
 
 # 2. Entra en la carpeta del proyecto
 cd DelPasajeWeb
