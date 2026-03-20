@@ -4,8 +4,8 @@ import { contentfulClient } from "../lib/contentful";
 // Pedimos los datos a Contenful
 // buscamos la entrada del tipo Homepage
 const entries = await contentfulClient.getEntries({
-    content_type: 'homepage',
-    limit: 1,
+  content_type: "homepage",
+  limit: 1,
 });
 
 // Desempaquetamos los datos
@@ -13,106 +13,93 @@ const entries = await contentfulClient.getEntries({
 const homeData = entries.items[0]?.fields || {};
 
 //preparamos las variables con fallbacks por las dudas
-const title = homeData.heroTitle || 'Del Pasaje';
-const subtitle = homeData.heroSubtitle || 'Rock argentino nacido en el oeste.';
+const title = homeData.heroTitle || "Del Pasaje";
+const subtitle = homeData.heroSubtitle || "Rock argentino nacido en el oeste.";
 
 // manejo de multimedia del fondo
-const rawImages = (homeData.heroBackground as any[])|| [];
+const rawImages = (homeData.heroBackground as any[]) || [];
 
-const backgroundData = rawImages.map(img => {
-    if (!img.fields?.file?.url) return null;
-    const isLogo = (img.fields.title || '').toLowerCase().includes('logo');
-    return {
-    url: `https:${img.fields.file.url}`,
-    isLogo: isLogo
-    };
-}).filter(item =>  item !== null);
-
+const backgrounds = rawImages
+  .map((img) => {
+    if (img.fields?.file?.url) {
+      return `https:${img.fields.file.url}`;
+    }
+    return null;
+  })
+  .filter((url) => url !== null);
 
 // fallback si no cargamos nada en contenful usamos local de emergencia
-if (backgroundData.length === 0) {
-    backgroundData.push({url: '/assets/img/galeria8.jpeg', isLogo: false});
+if (backgrounds.length === 0) {
+  backgrounds.push("/assets/img/galeria8.jpeg");
 }
-
 ---
 
-
 <section id="inicio" class="hero">
-
-    <div class="hero-slider">
-
-        {backgroundData.map((data, index) => (
-            // primera imagen index 0, lleva active para verse al inicio
-            <img src={data.url} alt={ `Fondo Hero ${index}`}
-                class={`slide-img ${index === 0 ? 'active' : ''} ${data.isLogo ? 'is-logo-image' : ''} `}
-            />
-        ))}
-        <!---  <img src="/assets/img/galeria9.jpeg" alt=""/>
+  <div class="hero-slider">
+    {
+      backgrounds.map((url, index) => (
+        // primera imagen index 0, lleva active para verse al inicio
+        <img
+          src={url}
+          alt={`Fondo Hero ${index}`}
+          class={`slide-img ${index === 0 ? "active" : ""} `}
+        />
+      ))
+    }
+    <!---  <img src="/assets/img/galeria9.jpeg" alt=""/>
         <img src="/assets/img/galeria10.jpeg" alt=""/>
         <img src="/assets/img/galeria8.jpeg" alt="foto">
         <img src="/assets/img/galeria11.jpeg" alt="">-->
+  </div>
+
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">{title}</h1>
+
+    <div class="hero-subtitle">
+      <p>{subtitle}</p>
     </div>
-
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <h1 class="hero-title">{title}</h1>
-
-        <div class="hero-subtitle">
-            <p>{subtitle}</p>
-             
-            </div>
-<div class="hero-buttons">
-        <a href="#fechas" class="hero-btn">
-            Ver fechas
-        </a>
-
-        <a href="https://open.spotify.com/intl-es/album/13WaU6z8Wvyi2NjeN1ONPv"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hero-btn-music">
-    Escuchar ahora</a>
+    <div class="hero-buttons">
+      <a href="#fechas" class="hero-btn"> Ver fechas </a>
     </div>
-</div>
+  </div>
 </section>
 
 <script>
+  // este corre en navegador para cambiar las fotos
+  const slides = document.querySelectorAll(".slide-img");
+  let currentSlide = 0;
+  const slideInterval = 5000; // 5 segundos entre foto
 
-    // este corre en navegador para cambiar las fotos
-    const slides = document.querySelectorAll('.slide-img');
-    let currentSlide = 0;
-    const slideInterval = 5000; // 5 segundos entre foto 
+  // se activa si hay mas de una foto
+  if (slides.length > 1) {
+    setInterval(() => {
+      // sacamos la clase active de la foto aactual
+      slides[currentSlide].classList.remove("active");
+      //calculo cual es la siguiente
+      currentSlide = (currentSlide + 1) % slides.length;
 
-    // se activa si hay mas de una foto
-    if (slides.length > 1 ) {
-        setInterval(() => {
-            // sacamos la clase active de la foto aactual
-            slides[currentSlide].classList.remove('active');
-            //calculo cual es la siguiente 
-            currentSlide = (currentSlide + 1) % slides.length;
-        
-        // ponemos active a la siguiente foto
-        slides[currentSlide].classList.add('active');
+      // ponemos active a la siguiente foto
+      slides[currentSlide].classList.add("active");
     }, slideInterval);
-};
-
+  }
 </script>
 
-
 <style>
-    .hero {
+  .hero {
     position: relative;
     height: 95vh;
     min-height: 600px;
     overflow: hidden;
-}
+  }
 
-.hero-slider {
+  .hero-slider {
     position: absolute;
     inset: 0;
     z-index: 0;
-}
+  }
 
-.hero-slider .slide-img {
+  .hero-slider .slide-img {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -120,40 +107,38 @@ if (backgroundData.length === 0) {
     object-fit: cover;
     opacity: 0;
     transition: opacity 1.5s ease-in-out;
-    
-}
+  }
 
-.hero-slider .slide-img.is-logo-image {
-    object-fit: contain;
-    width: 100%;
-    max-width: 800px;
-    height: auto;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
-}
-
-.hero-slider .slide-img.active {
+  .hero-slider .slide-img.active {
     opacity: 1;
-}
+  }
 
-@keyframes heroFade {
-    0% {opacity: 0;}
-    10% {opacity: 1;}
-    30% {opacity: 1;}
-    40% {opacity: 0;}
-    100% {opacity: 0;}
-}
+  @keyframes heroFade {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    30% {
+      opacity: 1;
+    }
+    40% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 
-.hero-overlay {
+  .hero-overlay {
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.6);
     z-index: 1;
-}
+  }
 
-.hero-content {
+  .hero-content {
     position: relative;
     z-index: 2;
     height: 100%;
@@ -163,48 +148,41 @@ if (backgroundData.length === 0) {
     align-items: center;
     text-align: center;
     padding: 1rem;
+  }
 
-}
-
-.hero-title,
-.hero-text {
+  .hero-title,
+  .hero-text {
     color: var(--color-text-main);
-}
+  }
 
-.hero-title {
+  .hero-title {
     font-size: clamp(3rem, 6vw, 5rem);
     font-family: var(--font-title);
     font-weight: 700;
     text-transform: uppercase;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
     letter-spacing: 3px;
-}
+  }
 
-
-.hero-text {
+  .hero-text {
     margin-top: 0.5rem;
     max-width: 600px;
     font-size: 1.1rem;
     line-height: 1.6;
     opacity: 0.95;
-    
-    
-}
+  }
 
-.hero-text p {
+  .hero-text p {
     margin-top: 0.5rem;
-}
+  }
 
-.hero-buttons {
+  .hero-buttons {
     margin-top: 2rem;
     display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
     justify-content: center;
-}
+  }
 
-.hero-btn {
-    
+  .hero-btn {
     padding: 0.8rem 2rem;
     color: var(--color-text-main);
     background: transparent;
@@ -214,50 +192,26 @@ if (backgroundData.length === 0) {
     text-transform: uppercase;
     font-size: 0.85rem;
     transition: var(--transition-fast, all 0.3s ease);
-}
+  }
 
-.hero-btn:hover {
+  .hero-btn:hover {
     background: transparent;
     color: var(--color-text-main);
     border-color: var(--color-text-main);
     transform: translateY(-2px);
-}
+  }
 
-.hero-btn-music {
-    padding: 0.8rem 2rem;
-    color: white;
-    background: transparent;
-    text-decoration: none;
-    border: 1px solid var(--color-brown-solid);
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    transition: var(--transition-fast, all 0.3s ease);
-    font-weight: bold;
-}
-
-.hero-btn-music:hover {
-    background: transparent;
-    color: var(--color-text-main);
-    border-color: var(--color-text-main);
-    transform: translateY(-2px);
-}
-
-@media (max-width: 600px) {
-
+  @media (max-width: 600px) {
+    .hero-title {
+      font-size: 2.5rem;
+    }
     .hero {
-        height: 75vh;
-        min-height: 450px;
+      height: 75vh;
+      min-height: 450px;
     }
-    .hero-slider .slide-img.is-logo-image {
-        max-width: 450px;
-    }
-    .hero-buttons {
-        gap: 1rem;
-    }
-    .hero-btn,
-    .hero-btn-music {
-        width: 100%;
-    }
-}
 
+    .hero-btn {
+      width: 100%;
+    }
+  }
 </style>
