@@ -1,5 +1,7 @@
 ---
 import { contentfulClient } from "../lib/contentful";
+import {Image} from 'astro:assets';
+
 
 // Pedimos los datos a Contenful
 // buscamos la entrada del tipo Homepage
@@ -39,10 +41,14 @@ if (backgrounds.length === 0) {
     {
       backgrounds.map((url, index) => (
         // primera imagen index 0, lleva active para verse al inicio
-        <img
+        <Image
           src={url}
           alt={`Fondo Hero ${index}`}
+          inferSize={true}
+          loading='eager'
+          fetchpriority='high'
           class={`slide-img ${index === 0 ? "active" : ""} `}
+
         />
       ))
     }

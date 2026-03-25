@@ -1,6 +1,6 @@
 ---
 import { contentfulClient } from "../lib/contentful";
-
+import { Image } from "astro:assets";
 const entries = await contentfulClient.getEntries( {
   content_type: 'globalSettings',
   limit: 1,
@@ -21,8 +21,14 @@ const pressKitUrl = pressKitFile?.fields?.file?.url
 <nav class="nav">
   <div class="nav-inner">
     <a href="/#inicio" class="logo-link"> 
-      <img src="/assets/icons/DelPasajeLogoNegroEnPng.png" alt="Logo de Del pasaje"
-      class="nav-logo"> </a>
+      <Image 
+      src="/assets/icons/DelPasajeLogoNegroEnPng.png" 
+      alt="Logo de Del pasaje"
+      class="nav-logo"
+      width='50'
+      height='50'
+      loading='eager'>
+     </a>
 
       <button class="hamburger" aria-label="Abrir menú">
         <span class="bar"></span>

@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import { contentfulClient } from "../lib/contentful";
 
 const year = new Date().getFullYear();
@@ -30,7 +31,7 @@ if (settings.spotifyUrl) {
 }
 
 if (settings.deezerUrl) {
-  socialLinks.push({name: 'Deezer', url: settings.dezzerUrl, icon: "/assets/icons/deezer.png"})
+  socialLinks.push({name: 'Deezer', url: settings.deezerUrl, icon: "/assets/icons/deezer.png"})
 }
 
 if (settings.amazonMusic) {
@@ -38,7 +39,7 @@ if (settings.amazonMusic) {
 }
 
 if (settings.appleMusic) {
-  socialLinks.push({name: 'Apple Music' , url: settings.applemusic, icon: "/assets/icons/apple-music.png"})
+  socialLinks.push({name: 'Apple Music' , url: settings.appleMusic, icon: "/assets/icons/apple-music.png"})
 }
 ---
 
@@ -52,8 +53,14 @@ if (settings.appleMusic) {
 <ul class="footer-social">
   {socialLinks.map(link => (
     <li>
-      <a href={link.url} target="_blank" rel="noopener" aria-label={link.name}>
-        <img src={link.icon} alt={link.name} class="social-icon" />
+      <a href={link.url} target="_blank" rel="noopener" aria-label={link.name} >
+        <Image 
+          src={link.icon} 
+          alt={link.name} 
+          width='20'
+          height='20'
+          class="social-icon" 
+          loading="lazy"/>
       </a>
     </li>
   ))}

@@ -1,6 +1,7 @@
 ---
 import { contentfulClient } from "../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import {Image} from 'astro:assets'; 
 
 const entries = await contentfulClient.getEntries({
   content_type: "homepage",
@@ -41,7 +42,7 @@ const aboutHtmlString = rawRichText
           <a href="/history" class="btn-history">Historia Completa</a>
 
           <a
-            href="/assets/img/prensa1.jpg"
+            href="/assets/img/img4_.png"
             data-fslightbox="prensa"
             class="btn-press"
           >
@@ -49,14 +50,28 @@ const aboutHtmlString = rawRichText
           >
         </div>
         <div class="hidden">
-          <a href="/assets/img/prensa2.jpg" data-fslightbox="prensa"></a>
-          <a href="/assets/img/prensa3.jpg" data-fslightbox="prensa"></a>
+          
+          <a href="/assets/img/img5_.png" data-fslightbox="prensa"></a>
+          <a href="/assets/img/img17_.png" data-fslightbox="prensa"></a>
+          <a href="/assets/img/img11__.png" data-fslightbox="prensa"></a>
         </div>
       </div>
 
       <div class="about-flyer">
-        <img src={aboutImageUrl} alt="Tapa disco Lineas del Ocaso" class="img-back"/>
-        <img src={aboutImageUrl2} alt="Tapa disco Barro" class="img-front"/>
+        <Image
+         src={aboutImageUrl} 
+         alt="Tapa disco Lineas del Ocaso" 
+         width='300'
+         height='300'
+         class="img-back"
+         loading='lazy'/>
+        <Image 
+        src={aboutImageUrl2} 
+        alt="Tapa disco Barro"
+        width='300'
+        height='300'
+        class="img-front"
+        loading='lazy'/>
       </div>
     </div>
   </div>

@@ -8,10 +8,14 @@ const entries = await contentfulClient.getEntries({
     order: '-sys.createdAt' as any,
 });
 
-const videos = entries.items.map((item:any) => ({
-    title: item.fields.title,
-    youtubeUrl: item.fields.youtubeUrl
-}));
+const videos = entries.items.map((item:any) => {
+    // ESTA LÍNEA ES MAGIA PURA: Te va a imprimir en la pantallita negra qué datos llegan
+        
+    return {
+        title: item.fields.title,
+        youtubeUrl: item.fields.youtubeUrl
+    }
+});
 ---
 
 

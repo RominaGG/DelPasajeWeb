@@ -14,7 +14,7 @@ const id = getYouTubeId(youtubeUrl);
     <div class="video-responsive">
         <iframe 
         src={`https://www.youtube.com/embed/${id}`} 
-        title={title}
+        title={title || 'Video oficial de Del Pasaje'}
         loading="lazy"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture "
         allowfullscreen

@@ -1,6 +1,6 @@
 ---
 import { contentfulClient } from "../lib/contentful";
-
+import { Image } from "astro:assets";
 // pedimos los albumes a contentful
 const entries = await contentfulClient.getEntries({
     content_type: 'galeria',
@@ -61,7 +61,11 @@ const PHOTO_LIMIT = 4;
                     data-fslightbox={album.id}
                     class={`photo-item ${photoIndex >= PHOTO_LIMIT ? 'hidden' : ''}`}
                     >
-                        <img src={photoUrl} alt={`Foto de ${album.title}`} loading="lazy" />
+                        <Image 
+                        src={photoUrl} 
+                        alt={`Foto de ${album.title}`}
+                        inferSize={true}
+                        loading="lazy" />
                     </a>
                 ))}
             </div>
